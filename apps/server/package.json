@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/main.ts --watch ../../packages/shared/index.ts --watch ./src --ext ts"
+    "dev": "nodemon src/main.ts --watch ../../packages/shared/index.ts --watch ./src --ext ts",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +20,8 @@
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
   },
   "dependencies": {
     "@repo/shared": "workspace:*",
