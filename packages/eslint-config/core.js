@@ -16,6 +16,7 @@ const config = {
   plugins: ["@typescript-eslint"],
   extends: ["plugin:@typescript-eslint/recommended"],
   rules: {
+    "no-else-return": "error",
     "no-restricted-imports": "off",
     "@typescript-eslint/no-restricted-imports": [
       "error",
