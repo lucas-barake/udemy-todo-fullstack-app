@@ -87,7 +87,8 @@ const config = {
       },
     ],
     "@typescript-eslint/prefer-nullish-coalescing": "error",
-    "no-shadow": "error",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "error",
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {

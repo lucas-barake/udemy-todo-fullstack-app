@@ -3,6 +3,8 @@ import { z } from "zod";
 import { promises as fs } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
+import { HttpError } from "$/common/exceptions/http-error.exception";
+import { HttpStatus } from "$/common/enums/http-status.enum";
 
 type ReadJsonResult = { success: true; todos: Todo[] } | { success: false; error: Error };
 type CreateArgs = Omit<Todo, "id">;
@@ -73,7 +75,11 @@ export class Db {
       id: uuidv4(),
     } satisfies Todo;
     const readResult = await this.readJson();
-    if (!readResult.success) throw new Error(`Error in create: ${readResult.error.message}`);
+    if (!readResult.success)
+      throw new HttpError({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Error in creating todo.",
+      });
     readResult.todos.push(newTodo);
     await this.writeJson(readResult.todos);
     return newTodo;
@@ -81,14 +87,22 @@ export class Db {
 
   public async findUnique(args: FindUniqueArgs): Promise<Todo | null> {
     const readResult = await this.readJson();
-    if (!readResult.success) throw new Error(`Error in findUnique: ${readResult.error.message}`);
+    if (!readResult.success)
+      throw new HttpError({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Error in finding todo by id.",
+      });
     const foundTodo = readResult.todos.find((todo) => todo.id === args.id);
     return foundTodo ?? null;
   }
 
   public async update(args: UpdateArgs): Promise<Todo | null> {
     const readResult = await this.readJson();
-    if (!readResult.success) throw new Error(`Error in update: ${readResult.error.message}`);
+    if (!readResult.success)
+      throw new HttpError({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Error in updating todo.",
+      });
     const foundIndex = readResult.todos.findIndex((todo) => todo.id === args.id);
     if (foundIndex === -1) return null;
 
@@ -103,7 +117,11 @@ export class Db {
 
   public async delete(args: DeleteArgs): Promise<void> {
     const readResult = await this.readJson();
-    if (!readResult.success) throw new Error(`Error in deleteTodo: ${readResult.error.message}`);
+    if (!readResult.success)
+      throw new HttpError({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Error in deleting todo.",
+      });
     const todoIndex = readResult.todos.findIndex((todo) => todo.id === args.id);
     if (todoIndex === -1) return;
 
@@ -113,7 +131,11 @@ export class Db {
 
   public async deleteMany(args: DeleteManyArgs): Promise<void> {
     const readResult = await this.readJson();
-    if (!readResult.success) throw new Error(`Error in deleteMany: ${readResult.error.message}`);
+    if (!readResult.success)
+      throw new HttpError({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Error in deleting todos.",
+      });
     if ("clearAll" in args) {
       await this.writeJson([]);
       return;
